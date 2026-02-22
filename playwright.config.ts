@@ -24,6 +24,7 @@ export default defineConfig({
     ["html", { open: "never" }],
     ["list"],
     ["json", { outputFile: "test-results/results.json" }],
+    ["junit", { outputFile: "test-results/junit.xml" }],
   ],
 
   // ─── Global Settings ────────────────────────────────
