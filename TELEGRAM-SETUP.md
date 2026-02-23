@@ -8,7 +8,7 @@ Your Telegram bot is created! Here's everything you need to set it up.
 
 **Bot Name:** TwentyFourHrTests_bot  
 **Bot Username:** @TwentyFourHrTests_bot  
-**Bot Token:** `8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw`  
+**Bot Token:** `<YOUR_BOT_TOKEN>`  
 **Bot URL:** https://t.me/TwentyFourHrTests_bot
 
 ---
@@ -25,7 +25,7 @@ Your Telegram bot is created! Here's everything you need to set it up.
 2. **Get the Chat ID:**
    ```bash
    # Use this command to get updates
-   curl https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/getUpdates
+   curl https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
    ```
 
 3. **Look for the chat ID in the response:**
@@ -68,13 +68,13 @@ Your Telegram bot is created! Here's everything you need to set it up.
 
 ```bash
 # Test bot connection
-curl https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/getMe
+curl https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getMe
 
 # Should return:
 {
   "ok": true,
   "result": {
-    "id": 8287977280,
+    "id": 123456789,
     "is_bot": true,
     "first_name": "TwentyFourHrTests_bot",
     "username": "TwentyFourHrTests_bot",
@@ -89,7 +89,7 @@ curl https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/
 
 ```bash
 # Replace CHAT_ID with your actual chat ID
-curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/sendMessage \
+curl -X POST https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage \
   -d chat_id=CHAT_ID \
   -d text="✅ Test message from Jenkins CI/CD"
 ```
@@ -106,7 +106,7 @@ curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSN
 #### Credential 1: Bot Token
 - **Kind:** Secret text
 - **Scope:** Global
-- **Secret:** `8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw`
+- **Secret:** `<YOUR_BOT_TOKEN>`
 - **ID:** `telegram-token`
 - **Description:** Telegram bot token for QA notifications
 
@@ -151,7 +151,7 @@ script {
 
 ```bash
 # Set bot description
-curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/setMyDescription \
+curl -X POST https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setMyDescription \
   -d description="🤖 24HR Service QA Bot - Sends Jenkins build notifications"
 ```
 
@@ -159,7 +159,7 @@ curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSN
 
 ```bash
 # Set bot commands
-curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/setMyCommands \
+curl -X POST https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setMyCommands \
   -d commands='[{"command":"status","description":"Get Jenkins build status"},{"command":"help","description":"Show help"}]'
 ```
 
@@ -167,7 +167,7 @@ curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSN
 
 ```bash
 # Upload a profile picture (replace with actual image URL)
-curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/setChatPhoto \
+curl -X POST https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setChatPhoto \
   -F chat_id=@TwentyFourHrTests_bot \
   -F photo=@/path/to/photo.jpg
 ```
@@ -212,7 +212,7 @@ Duration: 2 min 15 sec
 - Personal chat IDs are positive numbers
 
 **Check 3: Token is correct**
-- Test with: `curl https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/getMe`
+- Test with: `curl https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getMe`
 - Should return bot info
 
 **Check 4: Jenkins credentials**
@@ -291,7 +291,7 @@ Some tests failed. [View Details](http://jenkins-url/job/24hr-automated-tests/44
 
 ```bash
 # Send message with buttons
-curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/sendMessage \
+curl -X POST https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage \
   -d chat_id=CHAT_ID \
   -d text="Build completed. What would you like to do?" \
   -d reply_markup='{"inline_keyboard":[[{"text":"View Report","url":"http://jenkins-url/report"},{"text":"Rerun Tests","callback_data":"rerun"}]]}'
@@ -302,7 +302,7 @@ curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSN
 ```bash
 # Send last 10 lines of build log
 LOG=$(tail -10 /path/to/build.log)
-curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw/sendMessage \
+curl -X POST https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage \
   -d chat_id=CHAT_ID \
   -d text="Last 10 lines of build log:\n\`\`\`\n$LOG\n\`\`\`" \
   -d parse_mode=Markdown
@@ -315,7 +315,7 @@ curl -X POST https://api.telegram.org/bot8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSN
 - [ ] Bot created: @TwentyFourHrTests_bot
 - [ ] Group created and bot added
 - [ ] Chat ID obtained (starts with -100)
-- [ ] Bot token saved: `8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw`
+- [ ] Bot token saved: `<YOUR_BOT_TOKEN>`
 - [ ] Jenkins credentials added:
   - [ ] `telegram-token` with bot token
   - [ ] `telegram-chat-id` with chat ID
@@ -355,6 +355,6 @@ Your Telegram bot is ready to send Jenkins notifications. Next:
 
 ---
 
-**Bot Token:** `8287977280:AAGPOeDPiQyceUQR2PrEh8O5slSNz3SgImw`  
+**Bot Token:** `<YOUR_BOT_TOKEN>`  
 **Bot URL:** https://t.me/TwentyFourHrTests_bot  
 **Keep this token secure!**
