@@ -1,0 +1,24 @@
+{
+  "name": "24hr-automated-tests",
+  "version": "1.0.0",
+  "description": "Automated E2E & API tests for 24Hr Service (24hr-New-UI + 24hourservice-Backend)",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "test:auth": "npx playwright test --grep @auth",
+    "test:tickets": "npx playwright test --grep @tickets",
+    "test:dashboard": "npx playwright test --grep @dashboard",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "test:regression": "npx playwright test --grep @regression",
+    "test:api": "npx playwright test --grep @api",
+    "test:ci": "npx playwright test --project=chromium --reporter=html,json,junit",
+    "report": "npx playwright show-report",
+    "codegen": "npx playwright codegen http://localhost:4000"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "dotenv": "^16.4.7"
+  }
+}
