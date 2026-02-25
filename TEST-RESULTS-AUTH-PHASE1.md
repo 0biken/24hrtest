@@ -1,7 +1,7 @@
 # 🧪 AUTH TEST RESULTS — Phase 1: Valid Login (Critical)
 
 **Test Date:** February 24, 2026  
-**Test Environment:** https://dev.24hrtruckfix.com  
+**Test Environment:** <https://dev.24hrtruckfix.com>  
 **Tester:** QA Automation  
 **Status:** IN PROGRESS ⏳
 
@@ -11,11 +11,11 @@
 
 ### Phase 1: Valid Login (Critical Path)
 
-| ID | Test Case | Role | Expected Result | Status | Notes |
-|----|-----------|------|-----------------|--------|-------|
-| AUTH-001 | Valid sign in — Super Admin | Super Admin | Admin dashboard loads, session token set | ⏳ | Running... |
-| AUTH-002 | Valid sign in — Agent | Agent | Agent dashboard loads, agent-specific nav shown | ⏳ | Running... |
-| AUTH-003 | Valid sign in — Client | Client | Client dashboard loads, client-specific views shown | ⏳ | Running... |
+| ID | Test Case | Role | Expected Result | Actual Result | Status |
+|---|---|---|---|---|---|
+| AUTH-001 | Valid sign in — Super Admin | Super Admin | Admin dashboard loads, session token set | Redirected to `/tickets` | ✅ PASS |
+| AUTH-002 | Valid sign in — Agent | Agent | Agent dashboard loads, agent-specific nav shown | Sign in button clicked, but stuck on `/auth/signin` with no error | ❌ FAIL |
+| AUTH-003 | Valid sign in — Client | Client | Client dashboard loads, client-specific views shown | Redirected to `/policies` | ✅ PASS |
 
 ---
 
@@ -38,7 +38,8 @@
 **Credentials:** `lordsond2+5@gmail.com` / `{:2)]tR!`
 
 **Steps:**
-1. Navigate to https://dev.24hrtruckfix.com/auth/signin
+
+1. Navigate to <https://dev.24hrtruckfix.com/auth/signin>
 2. Enter email: `lordsond2+5@gmail.com`
 3. Enter password: `{:2)]tR!`
 4. Click "Sign In"
@@ -46,12 +47,14 @@
 6. Verify redirect to dashboard
 
 **Expected Result:**
+
 - ✅ Login successful
 - ✅ Redirected to `/tickets` or admin dashboard
 - ✅ Session token set in cookies
 - ✅ Admin-specific navigation visible
 
 **Actual Result:**
+
 - Status: ⏳ PENDING
 
 ---
@@ -63,7 +66,8 @@
 **Credentials:** `atandaeunice9+1@gmail.com` / `ng86q+b7~gnwivl`
 
 **Steps:**
-1. Navigate to https://dev.24hrtruckfix.com/auth/signin
+
+1. Navigate to <https://dev.24hrtruckfix.com/auth/signin>
 2. Enter email: `atandaeunice9+1@gmail.com`
 3. Enter password: `ng86q+b7~gnwivl`
 4. Click "Sign In"
@@ -71,12 +75,14 @@
 6. Verify redirect to agent dashboard
 
 **Expected Result:**
+
 - ✅ Login successful
 - ✅ Redirected to agent-specific dashboard
 - ✅ Agent-specific navigation visible
 - ✅ Session token set
 
 **Actual Result:**
+
 - Status: ⏳ PENDING
 
 ---
@@ -88,7 +94,8 @@
 **Credentials:** `zsavizfesh@gmail.com` / `Zw1{?Z;{>HDj1!SC`
 
 **Steps:**
-1. Navigate to https://dev.24hrtruckfix.com/auth/signin
+
+1. Navigate to <https://dev.24hrtruckfix.com/auth/signin>
 2. Enter email: `zsavizfesh@gmail.com`
 3. Enter password: `Zw1{?Z;{>HDj1!SC`
 4. Click "Sign In"
@@ -96,12 +103,14 @@
 6. Verify redirect to client dashboard
 
 **Expected Result:**
+
 - ✅ Login successful
 - ✅ Redirected to client-specific dashboard
 - ✅ Client-specific views visible
 - ✅ Session token set
 
 **Actual Result:**
+
 - Status: ⏳ PENDING
 
 ---

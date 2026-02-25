@@ -29,7 +29,7 @@ test.describe("Authentication @auth", () => {
         await expect(loginPage.signUpLink).toBeVisible();
     });
 
-    test("TC-AUTH-002: Valid admin login redirects to /tickets @smoke", async ({ page }) => {
+    test("AUTH-001: Valid sign in — Super Admin @smoke", async ({ page }) => {
         const loginPage = new LoginPage(page);
         await loginPage.goto();
 
@@ -52,6 +52,66 @@ test.describe("Authentication @auth", () => {
 
         // Admin/super_admin goes to /tickets
         await loginPage.expectRedirectToDashboard();
+    });
+
+    test("AUTH-002: Valid sign in — Agent @smoke", async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+
+        await loginPage.login(
+            process.env.AGENT_EMAIL!,
+            process.env.AGENT_PASSWORD!
+        );
+
+        // Check for error toast first
+        const hasError = await loginPage.errorToast.isVisible({ timeout: 5000 }).catch(() => false);
+        if (hasError) {
+            const errorText = await loginPage.errorToast.textContent();
+            console.error(`Agent Login Failed: ${errorText}`);
+            throw new Error(`Login failed with error: ${errorText}`);
+        }
+
+        const went2FA = await page
+            .waitForURL("**/auth/2fa-auth**", { timeout: 8000 })
+            .then(() => true)
+            .catch(() => false);
+
+        if (went2FA) {
+            const codeInput = page.locator('input[type="text"], input[type="number"]').first();
+            await codeInput.fill(process.env.TEST_2FA_CODE || "123456");
+            await page.getByRole("button", { name: /verify|submit|confirm/i }).click();
+        }
+
+        // Wait to be navigated away from sign in
+        await page.waitForURL(url => !url.href.includes('/auth/signin'), { timeout: 30000 });
+        const finalUrl = page.url();
+        console.log(`Agent redirected to: ${finalUrl}`);
+    });
+
+    test("AUTH-003: Valid sign in — Client @smoke", async ({ page }) => {
+        const loginPage = new LoginPage(page);
+        await loginPage.goto();
+
+        await loginPage.login(
+            process.env.CLIENT_EMAIL!,
+            process.env.CLIENT_PASSWORD!
+        );
+
+        const went2FA = await page
+            .waitForURL("**/auth/2fa-auth**", { timeout: 8000 })
+            .then(() => true)
+            .catch(() => false);
+
+        if (went2FA) {
+            const codeInput = page.locator('input[type="text"], input[type="number"]').first();
+            await codeInput.fill(process.env.TEST_2FA_CODE || "123456");
+            await page.getByRole("button", { name: /verify|submit|confirm/i }).click();
+        }
+
+        // Wait to be navigated away from sign in
+        await page.waitForURL(url => !url.href.includes('/auth/signin'), { timeout: 30000 });
+        const finalUrl = page.url();
+        console.log(`Client redirected to: ${finalUrl}`);
     });
 
     test("TC-AUTH-003: Invalid password shows error toast @regression", async ({ page }) => {
