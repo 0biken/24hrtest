@@ -130,14 +130,21 @@ pipeline {
                 """
             )
             
-            // Telegram notification
+            // Telegram Notification via AI Bot
             script {
-                def message = """✅ *PASSED* — 24HR Regression
-*Job:* ${env.JOB_NAME} #${env.BUILD_NUMBER}
-*Duration:* ${currentBuild.durationString.replace(' and counting', '')}
-[View Report](${env.BUILD_URL})"""
+                def payload = """{
+                    "status": "SUCCESS",
+                    "jobName": "${env.JOB_NAME}",
+                    "buildNumber": "${env.BUILD_NUMBER}",
+                    "duration": "${currentBuild.durationString.replace(' and counting', '')}",
+                    "buildUrl": "${env.BUILD_URL}",
+                    "logs": ""
+                }"""
                 
-                bat """curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d parse_mode=Markdown -d text="${message.replaceAll('\n', '%0A')}" """
+                // Write payload to a temporary file to avoid complex escaping issues in curl
+                writeFile file: 'success_payload.json', text: payload
+                
+                bat 'curl -X POST http://localhost:4000/api/build-result -H "Content-Type: application/json" -d @success_payload.json'
             }
         }
 
@@ -158,12 +165,30 @@ pipeline {
                 """
             )
             
+            // Telegram Notification via AI Bot
             script {
-                def message = """⚠️ *UNSTABLE* — 24HR Regression
-*Job:* ${env.JOB_NAME} #${env.BUILD_NUMBER}
-Some tests failed. [View Details](${env.BUILD_URL})"""
+                // Collect logs from Playwright test results
+                def errorLogs = ""
+                try {
+                    errorLogs = bat(script: 'Get-ChildItem -Path test-results\\ -Filter "error-context.md" -Recurse | Get-Content | Out-String', returnStdout: true).trim()
+                    errorLogs = errorLogs.replaceAll('"', '\\\\"') // Escape quotes for JSON
+                    errorLogs = errorLogs.replaceAll('\r?\n', '\\\\n') // Escape newlines for JSON
+                    if (errorLogs.length() > 3000) {
+                         errorLogs = errorLogs.substring(0, 3000)
+                    }
+                } catch (Exception e) {}
+
+                def payload = """{
+                    "status": "FAILURE",
+                    "jobName": "${env.JOB_NAME}",
+                    "buildNumber": "${env.BUILD_NUMBER}",
+                    "duration": "${currentBuild.durationString.replace(' and counting', '')}",
+                    "buildUrl": "${env.BUILD_URL}",
+                    "logs": "${errorLogs}"
+                }"""
                 
-                bat """curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d parse_mode=Markdown -d text="${message.replaceAll('\n', '%0A')}" """
+                writeFile file: 'failure_payload.json', text: payload
+                bat 'curl -X POST http://localhost:4000/api/build-result -H "Content-Type: application/json" -d @failure_payload.json'
             }
         }
 
@@ -185,13 +210,30 @@ Some tests failed. [View Details](${env.BUILD_URL})"""
                 """
             )
             
+            // Telegram Notification via AI Bot
             script {
-                def message = """❌ *FAILED* — 24HR Regression
-*Job:* ${env.JOB_NAME} #${env.BUILD_NUMBER}
-*Failed Stage:* ${env.STAGE_NAME}
-[View Details](${env.BUILD_URL})"""
+                // Collect logs from Playwright test results
+                def errorLogs = ""
+                try {
+                    errorLogs = bat(script: 'Get-ChildItem -Path test-results\\ -Filter "error-context.md" -Recurse | Get-Content | Out-String', returnStdout: true).trim()
+                    errorLogs = errorLogs.replaceAll('"', '\\\\"') // Escape quotes for JSON
+                    errorLogs = errorLogs.replaceAll('\r?\n', '\\\\n') // Escape newlines for JSON
+                    if (errorLogs.length() > 3000) {
+                         errorLogs = errorLogs.substring(0, 3000)
+                    }
+                } catch (Exception e) {}
+
+                def payload = """{
+                    "status": "FAILURE",
+                    "jobName": "${env.JOB_NAME}",
+                    "buildNumber": "${env.BUILD_NUMBER}",
+                    "duration": "${currentBuild.durationString.replace(' and counting', '')}",
+                    "buildUrl": "${env.BUILD_URL}",
+                    "logs": "${errorLogs}"
+                }"""
                 
-                bat """curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d parse_mode=Markdown -d text="${message.replaceAll('\n', '%0A')}" """
+                writeFile file: 'failure_payload.json', text: payload
+                bat 'curl -X POST http://localhost:4000/api/build-result -H "Content-Type: application/json" -d @failure_payload.json'
             }
         }
     }

@@ -1,0 +1,8 @@
+{
+    "status": "FAILURE",
+    "jobName": "test-ai-bot",
+    "buildNumber": "1",
+    "duration": "10s",
+    "buildUrl": "http://localhost",
+    "logs": "Error: Timeout exceeded while waiting for element .login-btn"
+}
